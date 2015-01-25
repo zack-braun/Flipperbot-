@@ -1,0 +1,196 @@
+#include <Servo.h>
+
+Servo Servo_1;
+
+Servo Servo_2;
+
+Servo Servo_3;
+
+Servo Servo_4;
+
+int pos = 0;
+
+int pos2 = 0;
+
+int OUT1;
+
+int OUT2;
+
+int OUT3;
+
+int OUT4;
+
+int Up = true;
+
+int initial = true;
+
+int  New_pos1;
+
+int  New_pos2;
+
+int  Old_pos1;
+
+int  Old_pos2;
+
+
+
+void setup() {
+
+Servo_1.attach(9);   
+Servo_2.attach(10);  
+Servo_3.attach(11);
+Servo_4.attach(12);
+  
+Serial.begin(9600);
+delay(100);
+Serial.println( F("start") ); 
+
+}
+
+void loop() {                                         //////////////////////////// Might want to use void loop() for a control scheme turning the differnet modes on and off.//////////////
+  
+ //if (initial ==true){
+ //modeInitial();
+// }
+// if (Up == true){
+///  modeUp();
+ //}
+}
+
+void modeInitial(){
+  
+  Serial.println("stop");// where we want to start robot's servo pos's undecided??? 
+ 
+}
+
+void modeUp(){
+  
+Serial.println("up");  
+
+  for(pos = 10; pos < 180; pos+=1); 
+  {
+  Servo_1.write(pos);
+  Servo_2.write(pos);
+  updateFeedback();
+  New_pos1 = OUT1;
+  New_pos2 =OUT2;
+  delay(30);
+  updateFeedback();
+  Old_pos1 = OUT1;
+  New_pos2 = OUT2;
+  isMoving(); 
+    if(OUT1 > 160 && OUT2 > 160) {modeOut(); //goes to next mode
+    }
+
+  }
+}
+
+void modeOut() {
+
+Serial.println("out"); 
+
+    for(pos = 10; pos < 180; pos+=1); 
+  {
+  Servo_3.write(pos);
+  Servo_4.write(pos);
+  updateFeedback();
+  New_pos1 = OUT3;
+  New_pos2 =OUT4;
+  delay(30);
+  updateFeedback();
+  Old_pos1 = OUT3;
+  New_pos2 = OUT4;
+  isMoving(); 
+    if(OUT3 > 160 && OUT4 > 160) {modeDown(); //goes to next mode
+    }
+
+  }
+}
+ 
+  
+
+
+void modeDown(){
+  
+Serial.println("down");   
+  
+  for(pos = 160; pos >= 10; pos -= 1); 
+  {
+  Servo_1.write(pos);
+  Servo_2.write(pos);
+  updateFeedback();
+  New_pos1 = OUT1;
+  New_pos2 =OUT2;
+  delay(30);
+  updateFeedback();
+  Old_pos1 = OUT1;
+  New_pos2 = OUT2;
+  isMoving(); 
+    if(OUT1 > 25 && OUT2 > 25) {modeIn(); //goes to next mode
+    }
+
+  }
+ }
+  
+void modeIn(){
+ 
+Serial.println("In");
+
+
+  for(pos = 160; pos >= 10; pos -= 1); 
+  {
+  Servo_3.write(pos);
+  Servo_4.write(pos);
+  updateFeedback();
+  New_pos1 = OUT3;
+  New_pos2 =OUT4;
+  delay(30);
+  updateFeedback();
+  Old_pos1 = OUT3;
+  New_pos2 = OUT4;
+  isMoving(); 
+    if(OUT3 > 25 && OUT4 > 25) {modeUp();  //goes to next mode
+    }
+
+  }
+}  
+  
+  
+  
+
+
+void updateFeedback(){ //checks position
+  
+  OUT1 = analogRead(A3);
+  OUT1= map(OUT1, 92, 503, 0, 180);
+  Serial.println(OUT1);   
+  
+  OUT2 = analogRead(A5);
+  OUT2= map(OUT2, 90, 502, 0, 180);
+  Serial.print("\t");
+  Serial.println(OUT2);    
+       
+  OUT3 = analogRead(A7);
+  OUT3= map(OUT3, 90, 502, 0, 180); // need to be changed to correct pins and values on actual robot
+  Serial.print("\t");
+  Serial.println(OUT3);   
+       
+  OUT4 = analogRead(A9);
+  OUT4= map(OUT4, 90, 502, 0, 180);
+  Serial.print("\t");
+  Serial.println(OUT4);   
+      
+}
+
+void isMoving() { // troubleshoots if there is a problem returns to initial state and tries again
+  
+  if (New_pos1 != Old_pos1 || New_pos2 != Old_pos2){
+  return;
+  }
+  else {
+  modeInitial();
+  }
+}
+
+
+  
