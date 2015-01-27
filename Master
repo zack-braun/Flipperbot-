@@ -20,6 +20,9 @@ int  Old_pos2;
 
 void setup() {
 
+//1=6 Hands
+//2=5 Arms
+//3=4 Feet
 Servo_1.attach(9);   
 Servo_2.attach(10);  
 Servo_3.attach(11);
