@@ -1,41 +1,28 @@
 #include <Servo.h>
 
 Servo Servo_1;
-
 Servo Servo_2;
-
 Servo Servo_3;
-
 Servo Servo_4;
 
 int pos = 0;
-
 int pos2 = 0;
-
 int OUT1;
-
 int OUT2;
-
 int OUT3;
-
 int OUT4;
-
 int Up = true;
-
 int initial = true;
-
 int  New_pos1;
-
 int  New_pos2;
-
 int  Old_pos1;
-
 int  Old_pos2;
-
-
 
 void setup() {
 
+//1=6 Hands
+//2=5 Arms
+//3=4 Feet
 Servo_1.attach(9);   
 Servo_2.attach(10);  
 Servo_3.attach(11);
@@ -47,8 +34,8 @@ Serial.println( F("start") );
 
 }
 
-void loop() {                                         //////////////////////////// Might want to use void loop() for a control scheme turning the differnet modes on and off.//////////////
-  
+ //////////////////////////// Might want to use void loop() for a control scheme turning the differnet modes on and off.//////////////
+void loop() {
  //if (initial ==true){
  //modeInitial();
 // }
@@ -65,21 +52,22 @@ void modeInitial(){
 
 void modeUp(){
   
-Serial.println("up");  
+  Serial.println("up");  
 
   for(pos = 10; pos < 180; pos+=1); 
   {
-  Servo_1.write(pos);
-  Servo_2.write(pos);
-  updateFeedback();
-  New_pos1 = OUT1;
-  New_pos2 =OUT2;
-  delay(30);
-  updateFeedback();
-  Old_pos1 = OUT1;
-  New_pos2 = OUT2;
-  isMoving(); 
-    if(OUT1 > 160 && OUT2 > 160) {modeOut(); //goes to next mode
+    Servo_1.write(pos);
+    Servo_2.write(pos);
+    updateFeedback();
+    New_pos1 = OUT1;
+    New_pos2 =OUT2;
+    delay(30);
+    updateFeedback();
+    Old_pos1 = OUT1;
+    New_pos2 = OUT2;
+    isMoving(); 
+    if(OUT1 > 160 && OUT2 > 160) {
+      modeOut(); //goes to next mode
     }
 
   }
@@ -87,32 +75,29 @@ Serial.println("up");
 
 void modeOut() {
 
-Serial.println("out"); 
+  Serial.println("out"); 
 
-    for(pos = 10; pos < 180; pos+=1); 
+  for(pos = 10; pos < 180; pos+=1); 
   {
-  Servo_3.write(pos);
-  Servo_4.write(pos);
-  updateFeedback();
-  New_pos1 = OUT3;
-  New_pos2 =OUT4;
-  delay(30);
-  updateFeedback();
-  Old_pos1 = OUT3;
-  New_pos2 = OUT4;
-  isMoving(); 
-    if(OUT3 > 160 && OUT4 > 160) {modeDown(); //goes to next mode
+    Servo_3.write(pos);
+    Servo_4.write(pos);
+    updateFeedback();
+    New_pos1 = OUT3;
+    New_pos2 =OUT4;
+    delay(30);
+    updateFeedback();
+    Old_pos1 = OUT3;
+    New_pos2 = OUT4;
+    isMoving(); 
+    if(OUT3 > 160 && OUT4 > 160) {
+      modeDown(); //goes to next mode
     }
-
   }
 }
- 
-  
-
 
 void modeDown(){
   
-Serial.println("down");   
+  Serial.println("down");   
   
   for(pos = 160; pos >= 10; pos -= 1); 
   {
@@ -191,6 +176,3 @@ void isMoving() { // troubleshoots if there is a problem returns to initial stat
   modeInitial();
   }
 }
-
-
-  
